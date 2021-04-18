@@ -8,3 +8,4 @@ define('MSG_TITLE_REQUIRED', 'タスク名を入力してください');
 
 //ステータスを定義として定義
 define('TASK_STATUS_NOTYET', 'notyet');
+define('TASK_STATUS_DONE', 'done');

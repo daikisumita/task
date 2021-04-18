@@ -62,6 +62,24 @@ function createErrMsg($errors)
     return $err_msg;
 }
 
+function updateStatusToDone($id)
+{
+    $dbh = connectDb();
+
+    $sql = <<<EOM
+    UPDATE
+        tasks
+    SET
+        status = 'done'
+    WHERE
+        id = :id
+    EOM;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
 function findTaskByStatus($status)
 {
     $dbh = connectDb();
@@ -72,9 +90,6 @@ EOM;
 
 //プリペアドステータスのじゅんび
 $stmt =$dbh->prepare($sql);
-
-//バインドするパラメータの準備
-$status = 'notyet';
 
 $stmt->bindParam(':status', $status, PDO::PARAM_STR);
 

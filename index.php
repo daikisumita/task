@@ -1,29 +1,26 @@
 <?php
-
 require_once __DIR__ . '/functions.php';
-
 $title = '';
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //フォームに入寮されたデータを受け取る
+    // フォームに入力されたデータを受け取る
     $title = filter_input(INPUT_POST, 'title');
-
-    //バリデーション
+    // バリデーション
     $errors = insertValidate($title);
-
-    //エラーチェック
+    // エラーチェック
     if (empty($errors)) {
         // タスク登録処理の実行
         insertTask($title);
     }
 }
-
-$notyet_tasks = findTaskByStatus('TASK_STATUS_NOTYET');
-
-?> 
+// 未完了タスクの取得
+$notyet_tasks = findTaskByStatus(TASK_STATUS_NOTYET);
+// 完了タスクの取
+$done_tasks = findTaskByStatus(TASK_STATUS_DONE);
+?>
 <!DOCTYPE html>
 <html lang="ja">
-    <?php include_once __DIR__ . '/_head.html' ?>
+<?php include_once __DIR__ . '/_head.html' ?>
 <body>
     <div class="wrapper">
         <div class="new-task">
@@ -37,9 +34,9 @@ $notyet_tasks = findTaskByStatus('TASK_STATUS_NOTYET');
         <div class="notyet-task">
             <h2>未完了タスク</h2>
             <ul>
-                <?php foreach ($notyet_tasks as $task): ?>
+                <?php foreach ($notyet_tasks as $task) : ?>
                     <li>
-                        <a href="" class="btn done-btn">完了</a>
+                        <a href="done.php?id=<?= h($task['id']) ?>" class="btn done-btn">完了</a>
                         <a href="" class="btn edit-btn">編集</a>
                         <a href="" class="btn delete-btn">削除</a>
                         <?= h($task['title']) ?>
@@ -49,9 +46,11 @@ $notyet_tasks = findTaskByStatus('TASK_STATUS_NOTYET');
         </div>
         <div class="done-task">
             <h2>完了タスク</h2>
-            <ul>
-                <li>完了テストタスク</li>
-            </ul>
+            <?php foreach ($done_tasks as $task): ?>
+                <ul>
+                    <li><?= $task['title'] ?></li>
+                </ul>
+            <?php endforeach; ?>
         </div>
     </div>
 </body>
